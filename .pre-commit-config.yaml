@@ -1,0 +1,36 @@
+repos:
+  # 1. Formateo de código con Black
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        name: "Formateo de código (black)"
+        language_version: python3.11
+
+  # 2. Tests con pytest
+  - repo: local
+    hooks:
+      - id: pytest
+        name: "Pasar tests (pytest)"
+        entry: pytest
+        language: system
+        types: [python]
+        pass_filenames: false
+        always_run: true
+
+  # 3. Control de tamaño de archivos (máx. 500 KB)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-added-large-files
+        name: "Controlar tamaño de archivos (máx. 500 KB)"
+        args: ["--maxkb=500"]
+
+  # 4. Formato de mensaje de commit: feat:, fix:, chore:, etc.
+  - repo: local
+    hooks:
+      - id: commit-msg-format
+        name: "Formato de mensaje de commit (feat|fix|chore|docs|test|refactor|style|ci)"
+        entry: python hooks/check_commit_msg.py
+        language: system
+        stages: [commit-msg]
